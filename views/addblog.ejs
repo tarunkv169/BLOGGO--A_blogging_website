@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Document</title>
+    <%- include("./partials/head.ejs") %>
+    <%- include("./partials/background_css.ejs") %>
+</head>
+<body>
+    <%- include("./partials/nav.ejs") %>
+    <div class="container mt-4" data-bs-theme="dark">
+      
+       <form method="post" action="/blog/add-new" enctype="multipart/form-data">
+
+          <div class="mb-4">
+            <label for="coverImageUrl" class="form-label">Cover Image</label>
+            <input type="file" class="form-control" name="coverImageUrl" id="coverImageUrl" aria-describedby="coverImageUrl">
+          </div>
+
+          <div class="mb-4">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" name="title" id="title" aria-describedby="title">
+          </div>
+
+          <div class="mb-4">
+            <label for="body" class="form-label">Body</label>
+            <textarea class="form-control" name="body" id="body" style="height: 300px"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Submit</button>
+       </form>
+    </div>
+    <%- include("./partials/script.ejs") %>
+    <%- include("./partials/stars_logo_script.ejs") %>
+</body>
+</html>

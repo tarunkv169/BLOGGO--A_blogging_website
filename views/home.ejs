@@ -2,10 +2,32 @@
 <html lang="en">
 <head>
     <%- include("./partials/head.ejs") %>
+    <%- include("./partials/blog_card.ejs") %>
+    <%- include("./partials/background_css.ejs") %>
+   
     <title>Document</title>
 </head>
 <body>
     <%- include("./partials/nav.ejs") %>
+    
+    
+    <div class="container mt-4">
+        <div class="row row-cols-3 gy-3 mb-4">
+            <% blogs.forEach(blog => { %>
+               <div class="col-md-3 mb-4">
+                 <a href="/blog/<%= blog._id %>" class="card h-100" style="width: 18rem;">  <%# 💯see "viewblog.ejs render callback" here u see how to pick "particular blog" by id from database💯 %>
+                    <img src="<%= blog.coverImageUrl %>" class="card-img-top">   <%# to render output "ejs output tag" is must %>
+                    <div class="card-body">
+                      <h5 class="card-title"><%= blog.title %></h5>
+                      <span class="btn btn-dark">View</span>    
+                    </div> 
+                 </a>
+               </div>
+            <% }) %>
+        </div>
+    </div>
+
     <%- include("./partials/script.ejs") %>
+    <%- include("./partials/stars_logo_script.ejs") %>
 </body>
 </html>

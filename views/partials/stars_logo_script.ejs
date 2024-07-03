@@ -1,0 +1,60 @@
+<body>
+    <div id="stars-container">
+        <!-- JavaScript will generate stars dynamically here -->
+    </div>
+</body>
+
+<script>
+    // Function to generate random stars across the sky
+    function generateStars() {
+        var numStars = 180; // Number of stars
+        var starsContainer = document.getElementById('stars-container');
+
+        for (var i = 0; i < numStars; i++) {
+            var star = document.createElement('div');
+            star.classList.add('star');
+
+            // Random positioning within the viewport
+            var x = Math.random() * window.innerWidth;
+            var y = Math.random() * window.innerHeight;
+
+            // Random animation delay and duration
+            var delay = Math.random() * 5; // up to 5s delay
+            var duration = Math.random() * 10 + 5; // between 5s and 15s duration
+
+            star.style.left = x + 'px';
+            star.style.top = y + 'px';
+            star.style.animationDelay = delay + 's';
+            star.style.animationDuration = duration + 's';
+
+            starsContainer.appendChild(star);
+        }
+    }
+
+    // Generate stars when the page loads
+    window.onload = function() {
+        generateStars();
+    };
+
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            const output = document.getElementById('profileImagePreview');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+
+    function validateForm() {
+      var profileImage = document.getElementById('profileImage').files.length;
+      if (profileImage === 0) {
+        alert("Please upload a profile image.");
+        return false;
+      }
+      return true;
+    }
+
+    function triggerFileInput() {
+      document.getElementById('profileImage').click();
+    }
+</script>

@@ -1,29 +1,89 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Navbar</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav">
+<style>
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar-brand span {
+    margin-left: 8px;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  .user-dropdown {
+    display: flex;
+    align-items: center;
+  }
+
+  .user-dropdown img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
+
+  .navbar-nav {
+    align-items: center;
+  }
+  .dropdown-menu{
+    color: beige;
+    background-color: rgb(47, 51, 54);
+  }
+  .dropdown-item{
+    color: beige;
+  }
+  
+
+  body {
+    padding-top: 70px;
+  }
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <%- include("./nav_logo.ejs") %> 
+      <span>BLOGGO</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <% if (locals.user) { %>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
+            <a class="nav-link" href="/blog/add-new">Add blog</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
+            <a class="nav-link" href="/myblog/<%= user._id %>">My blogs</a>
           </li>
-         
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Dropdown link
+            <a class="nav-link dropdown-toggle user-dropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="<%= user.profileImage %>" alt="User">
+              <%= user.fullname %>
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+              <li><a class="dropdown-item" href="/user/logout">Log out</a></li>
             </ul>
           </li>
-        </ul>
-      </div>
+        <% } else { %>
+          <li class="nav-item">
+            <a class="nav-link" href="/user/signup">Create account</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/user/login">Log in</a>
+          </li>
+        <% } %>
+      </ul>
     </div>
-  </nav>
+  </div>
+</nav>
+
+<% if (locals.error) { %>
+  <div class="alert alert-danger" role="alert">
+    <%= locals.error %>
+  </div>
+<% } %>

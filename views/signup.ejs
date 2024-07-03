@@ -1,33 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <title>Signup</title>
     <%- include("./partials/head.ejs") %>
-    <title>Signup</title>
+    <%- include("./partials/auth_css.ejs") %>
+    <%- include("./partials/background_css.ejs") %>
+    
+   
 </head>
 <body>
+    <%- include("./partials/nav.ejs") %>
+    <%- include("./partials/logo.ejs") %>
+    
+   
+
     <div class="container">
-        <h1>Signup</h1>
-        <form method="post" action="/user/signup">
-            <div class="mb-3">
-              <label for="fullname" class="form-label">Full name</label>
-              <input type="text" class="form-control" name="fullname" id="fullname" aria-describedby="fullname">
-            </div>
-            <div class="mb-3">
-              <label for="exampleInputEmail1" class="form-label">Email address</label>
-              <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp">
-            </div>
-            <div class="mb-3">
-              <label for="exampleInputPassword1" class="form-label">Password</label>
-              <input type="password" class="form-control" name="password" id="exampleInputPassword1">
-            </div>
-          
-            <button type="submit" class="btn btn-primary">Signup</button>
-          </form>
-    </div>
-     
+        <h2>Sign up</h2>
+        <form method="post" action="/user/signup" enctype="multipart/form-data" onsubmit="return validateForm()">
+          <div class="profile-image-container mb-3">
+            <img id="profileImagePreview" src="/images/default_profile.png" alt="Profile Image">
+            <input type="file" class="form-control" name="profileImage" id="profileImage" accept="image/*" onchange="previewImage(event)">
+            <span class="pencil-icon" onclick="triggerFileInput()">✏️</span>
+          </div>
+          <div class="mb-3">
+            <input type="text" class="form-control" name="fullname" id="fullname" placeholder="Full name">
+          </div>
+          <div class="mb-3">
+            <input type="email" class="form-control" name="email" id="exampleInputEmail1" placeholder="Email address">
+          </div>
+          <div class="mb-4">
+            <input type="password" class="form-control" name="password" id="exampleInputPassword1" placeholder="Password">
+          </div>
+          <button type="submit" class="btn btn-primary">Signup</button>
+        </form>
+        <p>Already a member? <a class="link" href="/user/login">Login</a></p>
+      </div>
+
     <%- include("./partials/script.ejs") %>
+    <%- include("./partials/stars_logo_script.ejs") %>
+
+  
 </body>
 </html>
-
-
-
