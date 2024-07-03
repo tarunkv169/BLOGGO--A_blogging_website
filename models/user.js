@@ -2,13 +2,16 @@
 const createHmac = require("create-hmac");
 const mongoose = require("mongoose");
 const { randomBytes } = require("crypto"); 
+const {createTokenForUser,validateToken} =require("../service/auth");
 
 const userSchema = new mongoose.Schema({
-    fullname:{
+
+    
+    email:{
         type: String,
         required:true
     },
-    email:{
+    fullname:{
         type: String,
         required:true
     },
@@ -21,8 +24,9 @@ const userSchema = new mongoose.Schema({
         required:true
     },
     profileImage:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref:"../public/profile/default_profile.png"
+        type: String,
+        // default:"/images/default_profile.png"
+        required: false
     },
     role:{
         type: String,
@@ -33,14 +37,14 @@ const userSchema = new mongoose.Schema({
 
 
 //"save hone se pehle"--make hashpassword(salt + password) using createHmac(sha224)
-userSchema.pre("save", async function(next) {
+userSchema.pre("save", function(next) {
     const user = this; // represent user itself
     if (!user.isModified("password")) {
         return next();
     }
 
     const salt = randomBytes(16).toString("hex"); // Ensure the salt is a hex string
-    const hashed_password = createHmac("sha256", salt).update(user.password).digest(hex);
+    const hashed_password = createHmac("sha256", salt).update(user.password).digest("hex");
 
     user.salt = salt; // Ensure the correct context is used
     user.password = hashed_password;
@@ -49,22 +53,26 @@ userSchema.pre("save", async function(next) {
 });
 
 
-userSchema.static("matchpassword",async function(email,password){
-     const user = await this.findOne({email});                        //async and await is must to use everywhere
-     if(!user){return false};
+//salt---- is used to "protect" our "password" in "database"
+//token---- is used for authentication(verifying our login)
 
-     const stored_salt = user.salt;
-     const stored_hashed_password = user.password;
+userSchema.static("matchPasswordAndCreateToken",async function(email,password){
+     const Loginuser = await this.findOne({email});                        //async and await is must to use everywhere
+     if(!Loginuser){throw new Error("Incorrect password");};    // now 2-person password can same ...but email is uique...
+                                                               //so firstly we check email exist or not ...if not then throw "same error" on "password unmatch"
+     const stored_salt = Loginuser.salt;
+     const stored_hashed_password = Loginuser.password;
 
-     const hashing_user_password = createHmac("sha256",stored_salt).update(password).digest(hex);
+     const hashing_user_password = createHmac("sha256",stored_salt).update(password).digest("hex");
 
      if(stored_hashed_password !== hashing_user_password)
         {
             throw new Error("Incorrect password");
         }
 
-
-     return {...user,password: undefined,salt: undefined}
+     const token = createTokenForUser(Loginuser);
+     
+     return token;
 })
 
 
